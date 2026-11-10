@@ -1,0 +1,14 @@
+# LRU does not always win. The design plan's A B A C B on 2 lines, grown to fit the default
+# 4-way cache: A B C D A E B C D. Every block lands in set 0.
+#
+# Run with the defaults (--cache 64 --block 4 --ways 4).
+# Result: FIFO 4 hits, LRU 1 hit.
+R 0x0000   # A
+R 0x0010   # B
+R 0x0020   # C
+R 0x0030   # D
+R 0x0000   # A: a hit for both, and LRU refreshes it
+R 0x0040   # E: FIFO evicts A, LRU evicts B
+R 0x0010   # B: FIFO hits; LRU misses and evicts C
+R 0x0020   # C: FIFO hits; LRU misses and evicts D
+R 0x0030   # D: FIFO hits; LRU misses and evicts A

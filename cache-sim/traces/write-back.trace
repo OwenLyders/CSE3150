@@ -1,0 +1,11 @@
+# Write-back in action. A write changes only the cached copy and marks the line dirty;
+# main memory catches up when that line is evicted.
+#
+# Run with the defaults (--cache 64 --block 4 --ways 4). Both policies behave the same here.
+W 0x0001 0x7F   # miss: load block 0x0000 into set 0, then write; the line is now dirty
+R 0x0001        # hit: reads 0x7F from the cache, while memory still holds 0x01
+R 0x0010        # fill the rest of set 0
+R 0x0020
+R 0x0030
+R 0x0040        # set 0 is full: block 0x0000 is evicted, and it is dirty, so it is written back
+R 0x0001        # miss: block 0x0000 comes back from memory, and the byte is 0x7F

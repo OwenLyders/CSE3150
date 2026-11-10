@@ -1,0 +1,13 @@
+# The design plan's worked example (A B C A D A on 3 lines), grown by one block to fit
+# the default 4-way cache: A B C D A E A. Blocks 16 bytes apart share a set, so every
+# block here lands in set 0.
+#
+# Run with the defaults (--cache 64 --block 4 --ways 4).
+# Result: FIFO 1 hit (evicts A, then B); LRU 2 hits (evicts only B).
+R 0x0000   # A
+R 0x0010   # B
+R 0x0020   # C
+R 0x0030   # D
+R 0x0000   # A: a hit for both, and LRU refreshes it
+R 0x0040   # E: set 0 is full. FIFO evicts A (loaded first), LRU evicts B (used least recently)
+R 0x0000   # A: FIFO misses, LRU hits

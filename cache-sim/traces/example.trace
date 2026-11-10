@@ -1,0 +1,5 @@
+# The example from the design plan.
+# R <address>   or   W <address> <byte>
+R 0x1A2E
+W 0x1A30 0x7F
+R 0x1A2E
